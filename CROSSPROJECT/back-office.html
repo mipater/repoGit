@@ -48,18 +48,49 @@
 </div> <!-- END OF ROW -->
 
   <!-- Modal Trigger -->
-  <a class="waves-effect waves-light btn" href="#modal300">Modal</a>
+  <a class="waves-effect waves-light btn btn-floating btn-large waves-effect waves-light red" href="#modal500"><i class="material-icons">add</i></a>
 
   <!-- Modal Structure -->
-  <div id="modal300" class="modal modal-fixed-footer">
+  <div id="modal500" class="modal modal-fixed-footer">
     <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
+      <h4>Aggiungi Opera</h4>
+   	<form class="col s12">
+	  <div class="row">  
+		<div class="input-field col s12"> 
+		  <textarea id="titoloOpera" class="materialize-textarea"></textarea>
+		  <label class="active" for="modalAutoreOpera">Titolo</label>
+		</div> 
+	  </div> 
+	 </form>
+   	<form class="col s12">
+	  <div class="row">  
+		<div class="input-field col s12"> 
+		  <textarea id="autoreOpera" class="materialize-textarea"></textarea>
+		  <label class="active" for="modalAutoreOpera">Autore</label>
+		</div> 
+	  </div> 
+	 </form>
+   	<form class="col s12">
+	  <div class="row">  
+		<div class="input-field col s12"> 
+		  <textarea id="periodoOpera" class="materialize-textarea"></textarea>
+		  <label class="active" for="modalAutoreOpera">Periodo</label>
+		</div> 
+	  </div> 
+	 </form>
+   	<form class="col s12">
+	  <div class="row">  
+		<div class="input-field col s12"> 
+		  <textarea id="descrizioneOpera" class="materialize-textarea"></textarea>
+		  <label class="active" for="modalAutoreOpera">Descrizione</label>
+		</div> 
+	  </div> 
+	 </form>
     </div>
     <div class="modal-footer">
-      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
+      <a href="#!" id="addBtn" class="modal-action modal-close waves-effect waves-green btn-flat ">Invia</a>
     </div>
-  </div>
+  </div> 
 	
 <footer class="page-footer teal">
   <div class="page-footer teal">
