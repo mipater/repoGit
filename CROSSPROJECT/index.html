@@ -18,14 +18,14 @@
         <li><a href="index.html">Vetrina</a></li>
         <li><a id="indexLogin" href="login.html">Login</a></li>
         <li><a id="indexBackOffice" href="back-office.html" style="display: none">Back office</a></li>
-        <li><a id="indexLogout" onclick="logout()" style="display: none">Logout</a></li>
+        <li><a id="indexLogout" style="display: none">Logout</a></li>
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
         <li><a href="index.html">Vetrina</a></li>
         <li><a id="mobileBackOffice" href="back-office.html" style="display: none">Back Office</a></li>
         <li><a id="mobileLogin" href="login.html">Login</a></li>
-        <li><a id="mobileLogout" onClick="logout()" style="display: none">Logout</a></li>        
+        <li><a id="mobileLogout" style="display: none">Logout</a></li>        
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
@@ -151,6 +151,12 @@
   </footer>
 
   
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script>
+  <script src="js/init.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script> 
   <script>
 	  // Initialize Firebase
@@ -164,11 +170,6 @@
 	  };
       firebase.initializeApp(config);
   </script> 
-
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script>
-  <script src="js/init.js"></script>
   <script src="js/login.js"></script>
 
   </body>

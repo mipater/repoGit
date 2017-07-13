@@ -10,18 +10,19 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
+
 <body>
 <nav class="white" role="navigation">
   <div class="nav-wrapper container"> <a id="logo-container" href="index.html" class="brand-logo">&nbsp;CA2M</a>
     <ul class="right hide-on-med-and-down">
       <li><a href="index.html">Vetrina</a></li>
       <li><a id="indexBackOffice" href="back-office.html">Back office</a></li>
-      <li><a id="indexLogout" onclick="logout()">Logout</a></li>
+      <li><a id="indexLogout">Logout</a></li>
     </ul>
     <ul id="nav-mobile" class="side-nav">
       <li><a href="index.html">Vetrina</a></li>
       <li><a id="mobileBackOffice" href="back-office.html">Back Office</a></li>
-      <li><a id="mobileLogout" onClick="logout()">Logout</a></li>
+      <li><a id="mobileLogout">Logout</a></li>
     </ul>
     <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a> </div>
 </nav>
@@ -120,6 +121,11 @@
     <div class="container"> <a class="white-text">Made by</a> <a class="brown-text text-lighten-3">CA2M</a> </div>
   </div>
 </footer>
+ 
+
+<!--  Scripts--> 
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script> 
 <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script> 
 <script>
 	  // Initialize Firebase
@@ -132,11 +138,7 @@
 		messagingSenderId: "971543541518"
 	  };
       firebase.initializeApp(config);
-</script> 
-
-<!--  Scripts--> 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script> 
+</script>
 <script src="js/backoffice.js"></script> 
 <script src="js/init.js"></script> 
 <script src="js/login.js"></script>

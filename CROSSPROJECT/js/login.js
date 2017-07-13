@@ -52,11 +52,27 @@ function() {
 
 
 
-function logout() {
+//function logout() {
+//	
+//	"use strict";
+//	
+//	firebase.auth().signOut().then(function () {
+//		// Sign-Out successful.
+//		window.location = 'index.html';
+//
+//	}, function (error) {
+//		// An error happened.
+//		alert(error.message);
+//		
+//	});
+//	
+//}
+
+$("#indexLogout, #mobileLogout").click(function(){
 	
 	"use strict";
 	
-	firebase.auth().signOut().then(function () {
+		firebase.auth().signOut().then(function () {
 		// Sign-Out successful.
 		window.location = 'index.html';
 
@@ -66,4 +82,4 @@ function logout() {
 		
 	});
 	
-}
+});
