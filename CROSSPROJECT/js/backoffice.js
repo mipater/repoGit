@@ -1,46 +1,7 @@
 
-firebase.auth().onAuthStateChanged(function (user) {
-
+function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
+	
 	"use strict";
-
-	var uid;
-
-	if (user) {
-
-		// User is signed in.
-		
-		$(document).ready(function(){
-			
-			uid = user.uid;
-			if (uid == "gVNIcf2GI5PhnLSEElUdfhYb6jE3") {
-
-				$("#deleteBtn").hide();
-
-			}
-		});
-
-	}
-});
-
-
-$(document).ready(function(){
-	
-"use strict";
-
-var rowCount = 0;
-
-var ref = firebase.database().ref("opere");
-
-ref.on("child_added", function(snap) {
-	
-	rowCount++;
-
-	var opKey = snap.getKey();
-	var autore = snap.child("autore").val();
-	var descrizione = snap.child("descrizione").val();
-	var periodo = snap.child("periodo").val();
-	var titolo = snap.child("titolo").val();
-	var img = snap.child("url").val();
 	
 	var html = 
 '<div class="col s5 offset-s4"> <!-- INIZIO PRIMA COLONNA --> ' +
@@ -139,6 +100,29 @@ ref.on("child_added", function(snap) {
 ' </div> <!-- FINE PRIMA COLONNA -->';
 	
 	$("#prova").append(html);
+	
+}
+
+$(document).ready(function(){
+	
+"use strict";
+
+var rowCount = 0;
+
+var ref = firebase.database().ref("opere");
+
+ref.on("child_added", function(snap) {
+	
+	rowCount++;
+
+	var opKey = snap.getKey();
+	var autore = snap.child("autore").val();
+	var descrizione = snap.child("descrizione").val();
+	var periodo = snap.child("periodo").val();
+	var titolo = snap.child("titolo").val();
+	var img = snap.child("url").val();
+	
+	addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione);
 		
 });
 });
@@ -149,9 +133,6 @@ $("#addBtn").click(function(){
 	"use strict";
 
 	var newPostKey = firebase.database().ref().child('opere').push().key;
-	
-
-
 	var storageRef = firebase.storage().ref(newPostKey+'.jpg');
 	var file = document.getElementById('targetFiles').files[0];
 	var uploadTask = storageRef.put(file);
@@ -170,31 +151,17 @@ $("#addBtn").click(function(){
 	var task2 = storageRef2.put(file2);
 	
 
-uploadTask.on('state_changed', function(snapshot, newPostKey){
-  // Observe state change events such as progress, pause, and resume
-  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  console.log('Upload is ' + progress + '% done');
-  switch (snapshot.state) {
-    case firebase.storage.TaskState.PAUSED: // or 'paused'
-      console.log('Upload is paused');
-      break;
-    case firebase.storage.TaskState.RUNNING: // or 'running'
-      console.log('Upload is running');
-      break;
-  }
-}, function(error) {
+uploadTask.on('state_changed',
+ function(error) {
   // Handle unsuccessful uploads
-}, function() {
+}, function(newPostKey) {
   // Handle successful uploads on complete
   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
   var downloadURL = uploadTask.snapshot.downloadURL;
 	firebase.database().ref('opere/'+ newPostKey).update({
 		"url": downloadURL
 	});
-});
-
-	
+});	
 }); // END ADDBTN
 
 
@@ -230,6 +197,7 @@ $(document).on('click', '.cancellaNodo', function(){
 	"use strict";
 	
 	var count = this.id;
+	
 	var keyOpera = $("#idOpera"+count).val();
 	
 	var storageRef = firebase.storage().ref(keyOpera+'.jpg');
@@ -238,22 +206,45 @@ $(document).on('click', '.cancellaNodo', function(){
 	
 	  // Delete the file
 	storageRef.delete().then(function() {
-	  // File deleted successfully
-		alert("File cancellato con successo!");
 	}).catch(function(error) {
-	  // Uh-oh, an error occurred!
-		alert("Error removing file!");
+		var e1 = "Error removing file!";
+		alert(e1);
 	});
 	
-		  // Delete the file
 	storageRef2.delete().then(function() {
-	  // File deleted successfully
 	}).catch(function(error) {
-	  // Uh-oh, an error occurred!
-		alert("Error removing file!");
+		var e2 = "Error removing file!";
+		alert(e2);
 	});
 	
 	var updateRef = firebase.database().ref("opere/"+keyOpera).remove();
 
 });
 
+$(document).on('click', '.cancellaNodo', function(){
+	
+	"use strict";
+	
+	firebase.auth().onAuthStateChanged(function (user) {
+
+	var uid;
+
+	if (user) {
+
+		// User is signed in.
+		
+		$(document).ready(function(){
+			
+			uid = user.uid;
+			
+			if (uid == "gVNIcf2GI5PhnLSEElUdfhYb6jE3") {
+
+				$('.cancellaNodo').css({display: 'none'});
+
+			}
+		});
+
+	}
+});
+	
+});
