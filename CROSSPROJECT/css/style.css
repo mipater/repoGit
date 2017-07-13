@@ -55,3 +55,19 @@ p {
 footer.page-footer {
   margin: 0;
 }
+
+#indexBackOffice {
+	display: none;
+}
+
+#mobileBackOffice {
+	display: none;
+}
+
+#indexLogout {
+	display: none;
+}
+
+#mobileLogout {
+	display: none;
+}

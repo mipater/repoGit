@@ -148,12 +148,14 @@ $("#addBtn").click(function(){
     });
 	var storageRef2 = firebase.storage().ref(newPostKey+'.mp4'); 
 	var file2 = document.getElementById('targetFiles2').files[0];
-	var task2 = storageRef2.put(file2);
+	storageRef2.put(file2);
 	
 
 uploadTask.on('state_changed',
- function(error) {
+ function() {
   // Handle unsuccessful uploads
+	var e = "Error uploading file!";
+	alert(e);
 }, function(newPostKey) {
   // Handle successful uploads on complete
   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
@@ -175,11 +177,11 @@ $(document).on('click', '.modificaNodo', function(){
 	
     var imgStorage = firebase.storage().ref(keyOpera+'.jpg');		   
     var file = document.getElementById('targetImg'+count).files[0];
-	var uploadTask = imgStorage.put(file);
+	imgStorage.put(file);
 	
 	var videoStorage = firebase.storage().ref(keyOpera+'.mp4');
     var file2 = document.getElementById('targetVideo'+count).files[0];
-	var uploadTask2 = videoStorage.put(file2);
+	videoStorage.put(file2);
 						  
 	var descrizioneOperas = $("#descrizioneOpera"+count).val();
 	
@@ -206,18 +208,18 @@ $(document).on('click', '.cancellaNodo', function(){
 	
 	  // Delete the file
 	storageRef.delete().then(function() {
-	}).catch(function(error) {
+	}).catch(function() {
 		var e1 = "Error removing file!";
 		alert(e1);
 	});
 	
 	storageRef2.delete().then(function() {
-	}).catch(function(error) {
+	}).catch(function() {
 		var e2 = "Error removing file!";
 		alert(e2);
 	});
 	
-	var updateRef = firebase.database().ref("opere/"+keyOpera).remove();
+	firebase.database().ref("opere/"+keyOpera).remove();
 
 });
 
@@ -237,7 +239,7 @@ $(document).on('click', '.cancellaNodo', function(){
 			
 			uid = user.uid;
 			
-			if (uid == "gVNIcf2GI5PhnLSEElUdfhYb6jE3") {
+			if (uid === "gVNIcf2GI5PhnLSEElUdfhYb6jE3") {
 
 				$('.cancellaNodo').css({display: 'none'});
 
