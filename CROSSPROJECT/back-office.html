@@ -86,11 +86,34 @@
 		</div> 
 	  </div> 
 	 </form>
+  <form action="#">
+    <div class="file-field input-field">
+      <div id="uploadBtn" class="btn">
+        <span>Immagine</span>
+        <input id="targetFiles" type="file">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+  </form>
+  <form action="#">
+    <div class="file-field input-field">
+      <div id="uploadBtn2" class="btn">
+        <span>Video</span>
+        <input id="targetFiles2" type="file">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+  </form>
     </div>
     <div class="modal-footer">
       <a href="#!" id="addBtn" class="modal-action modal-close waves-effect waves-green btn-flat ">Invia</a>
     </div>
   </div> 
+  
 	
 <footer class="page-footer teal">
   <div class="page-footer teal">
@@ -109,7 +132,7 @@
 		messagingSenderId: "971543541518"
 	  };
       firebase.initializeApp(config);
-  </script> 
+</script> 
 
 <!--  Scripts--> 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 

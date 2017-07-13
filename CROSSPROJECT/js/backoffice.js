@@ -23,7 +23,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 
-$(document).ready(function(){	
+$(document).ready(function(){
 	
 "use strict";
 
@@ -34,11 +34,14 @@ var ref = firebase.database().ref("opere");
 ref.on("child_added", function(snap) {
 	
 	rowCount++;
+
 	var opKey = snap.getKey();
 	var autore = snap.child("autore").val();
 	var descrizione = snap.child("descrizione").val();
 	var periodo = snap.child("periodo").val();
 	var titolo = snap.child("titolo").val();
+	var img = snap.child("url").val();
+	
 	var html = 
 '<div class="col s5 offset-s4"> <!-- INIZIO PRIMA COLONNA --> ' +
     '<ul class="collapsible" data-collapsible="accordion"> <!-- INIZIO COLLAPSIBLE --> ' +
@@ -47,7 +50,7 @@ ref.on("child_added", function(snap) {
       ' <div class="collapsible-body"> ' +
         ' <!-- Modal Trigger --> ' +
 		'<div class="row">' +
-		' <img src="monna lisa.jpg" align="left" class="responsive-img">' +
+		' <img src="'+img+'" align="left" class="imgOp responsive-img">' +
 		'</div>' +
 		' <p align="right">' +
         ' <a class="waves-effect waves-light btn btn-large" href="#modal'+rowCount+'"><i class="material-icons">mode_edit</i></a>'+ 
@@ -101,6 +104,28 @@ ref.on("child_added", function(snap) {
 			  '</div>' +
 		     '</form>' +
 		    '</div>' +
+		   '<form action="#">'+
+		   '<div class="file-field input-field">'+
+			 '<div class="btn">'+
+				'<span>Immagine</span>'+
+				'<input id="targetImg'+rowCount+'" type="file">'+
+			 '</div>'+
+			 '<div class="file-path-wrapper">'+
+			  '<input class="file-path validate" type="text">'+
+			 '</div>'+
+		    '</div>'+
+		  '</form>'+
+		  '<form action="#">'+
+		   '<div class="file-field input-field">'+
+			 '<div class="btn">'+
+				'<span>Video</span>'+
+				'<input id="targetVideo'+rowCount+'" type="file">'+
+			 '</div>'+
+			 '<div class="file-path-wrapper">'+
+			  '<input class="file-path validate" type="text">'+
+			 '</div>'+
+		    '</div>'+
+		  '</form>'+
            '</div>'+
           ' <div class="modal-footer">'+ 
 	      '<a href="#!" id="'+rowCount+'" class="modificaNodo modal-action modal-close waves-effect waves-green btn-flat ">Conferma</a>'+
@@ -120,21 +145,58 @@ ref.on("child_added", function(snap) {
 
 	
 $("#addBtn").click(function(){
-
+	
 	"use strict";
 
 	var newPostKey = firebase.database().ref().child('opere').push().key;
+	
 
-	firebase.database().ref('opere/' + newPostKey).set({
 
-	 autore: $("#autoreOpera").val(),
-	 titolo: $("#titoloOpera").val(),
-	 periodo: $("#periodoOpera").val(),
-	 descrizione: $("#descrizioneOpera").val()
+	var storageRef = firebase.storage().ref(newPostKey+'.jpg');
+	var file = document.getElementById('targetFiles').files[0];
+	var uploadTask = storageRef.put(file);
+	
+	firebase.database().ref('opere/'+newPostKey).set({
 
+	autore: $("#autoreOpera").val(),
+	titolo: $("#titoloOpera").val(),
+	periodo: $("#periodoOpera").val(),
+    descrizione: $("#descrizioneOpera").val(),
+	url: "empty"
+
+    });
+	var storageRef2 = firebase.storage().ref(newPostKey+'.mp4'); 
+	var file2 = document.getElementById('targetFiles2').files[0];
+	var task2 = storageRef2.put(file2);
+	
+
+uploadTask.on('state_changed', function(snapshot, newPostKey){
+  // Observe state change events such as progress, pause, and resume
+  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  console.log('Upload is ' + progress + '% done');
+  switch (snapshot.state) {
+    case firebase.storage.TaskState.PAUSED: // or 'paused'
+      console.log('Upload is paused');
+      break;
+    case firebase.storage.TaskState.RUNNING: // or 'running'
+      console.log('Upload is running');
+      break;
+  }
+}, function(error) {
+  // Handle unsuccessful uploads
+}, function() {
+  // Handle successful uploads on complete
+  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+  var downloadURL = uploadTask.snapshot.downloadURL;
+	firebase.database().ref('opere/'+ newPostKey).update({
+		"url": downloadURL
 	});
-
 });
+
+	
+}); // END ADDBTN
+
 
 
 $(document).on('click', '.modificaNodo', function(){
@@ -143,12 +205,21 @@ $(document).on('click', '.modificaNodo', function(){
 	
 	var count = this.id;
 	var keyOpera = $("#idOpera"+count).val();
-	var titoloOperas = $("#titoloOpera"+count).val();
+	
+    var imgStorage = firebase.storage().ref(keyOpera+'.jpg');		   
+    var file = document.getElementById('targetImg'+count).files[0];
+	var uploadTask = imgStorage.put(file);
+	
+	var videoStorage = firebase.storage().ref(keyOpera+'.mp4');
+    var file2 = document.getElementById('targetVideo'+count).files[0];
+	var uploadTask2 = videoStorage.put(file2);
+						  
+	var descrizioneOperas = $("#descrizioneOpera"+count).val();
 	
 	var updateRef = firebase.database().ref("opere/"+keyOpera);
 	updateRef.update({
 
-		 "titolo": titoloOperas
+		 "descrizione": descrizioneOperas
 
 	});
 	
@@ -159,11 +230,30 @@ $(document).on('click', '.cancellaNodo', function(){
 	"use strict";
 	
 	var count = this.id;
-	var keyOpera = $("#idOpera1").val();
-	var updateRef = firebase.database().ref("opere/"+keyOpera);
-	updateRef.remove();
-	location.reload();
+	var keyOpera = $("#idOpera"+count).val();
 	
-});
+	var storageRef = firebase.storage().ref(keyOpera+'.jpg');
+	
+	var storageRef2 = firebase.storage().ref(keyOpera+'.mp4'); 
+	
+	  // Delete the file
+	storageRef.delete().then(function() {
+	  // File deleted successfully
+		alert("File cancellato con successo!");
+	}).catch(function(error) {
+	  // Uh-oh, an error occurred!
+		alert("Error removing file!");
+	});
+	
+		  // Delete the file
+	storageRef2.delete().then(function() {
+	  // File deleted successfully
+	}).catch(function(error) {
+	  // Uh-oh, an error occurred!
+		alert("Error removing file!");
+	});
+	
+	var updateRef = firebase.database().ref("opere/"+keyOpera).remove();
 
+});
 
