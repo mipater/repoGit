@@ -1,4 +1,4 @@
-
+/* crea una variabile di tipo stringa che serve a creare i vari componenti(collapsible, modal, buttons, forms, textarea) in maniera dinamica, aggiungedoli ad uno specifico <div> con id=#prova nel <body> di back-office.html. */
 function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
 	
 	"use strict";
@@ -14,10 +14,10 @@ function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
 		' <img src="'+img+'" align="left" class="imgOp responsive-img">' +
 		'</div>' +
 		' <p align="right">' +
-        ' <a class="waves-effect waves-light btn btn-large" href="#modal'+rowCount+'"><i class="material-icons">mode_edit</i></a>'+ 
+        ' <a class="mod waves-effect waves-light btn btn-large" href="#modal'+rowCount+'"><i class="material-icons">mode_edit</i></a>'+ 
          '<!-- Modal Structure -->' +
-       '  <div id="modal'+rowCount+'" class="modal modal-fixed-footer">'+
-          ' <div class="modal-content"> '+
+         '<div id="modal'+rowCount+'" class="modal modal-fixed-footer">'+
+          ' <div class="modal-content">'+
             ' <h4>'+ titolo +'</h4>'+
 		    '<form class="col s12">'+
 			'<div class="row"> ' +
@@ -99,10 +99,10 @@ function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
   ' </ul> <!-- FINE COLLAPSIBLE -->'+
 ' </div> <!-- FINE PRIMA COLONNA -->';
 	
-	$("#prova").append(html);
-	
+	$("#prova").append(html);	
 }
 
+// listener che per ogni nodo aggiunto al database mi costruisce il codice html dinamicamente aggiungendo i valori del nodo prelevati dal database stesso.
 $(document).ready(function(){
 	
 "use strict";
@@ -127,7 +127,7 @@ ref.on("child_added", function(snap) {
 });
 });
 
-	
+/* listener che si attiva quando viene cliccato il pulsante con id=#addBtn situato nella pagina back-office.html. Aggiunge un nuovo nodo (opera) nel database, prelevando le informazioni da appositi form compilati dall'utente.*/
 $("#addBtn").click(function(){
 	
 	"use strict";
@@ -164,10 +164,9 @@ uploadTask.on('state_changed',
 		"url": downloadURL
 	});
 });	
-}); // END ADDBTN
+}); 
 
-
-
+/* listener che, in seguito al click del pulsante "conferma" creato dinamicamente, salva le modifiche effettuate dall'utente, il quale modifica i campi desiderati relativi all'opera, e le apporta al database al relativo nodo.*/
 $(document).on('click', '.modificaNodo', function(){
 	
 	"use strict";
@@ -194,6 +193,7 @@ $(document).on('click', '.modificaNodo', function(){
 	
 });
 
+// listener che, in seguito al click del pulsante "elimina" creato dinamicamente, cancella il nodo nel database corrispondente all'opera che si sta cancellando.
 $(document).on('click', '.cancellaNodo', function(){
 	
 	"use strict";
@@ -223,12 +223,13 @@ $(document).on('click', '.cancellaNodo', function(){
 
 });
 
-$(document).on('click', '.cancellaNodo', function(){
+// listener che nasconde il pulsante creato dinamicamente "elimina" se l'utente autenticato corrisponde all'operatore del museo, il quale non può cancellare le opere.
+$(document).on('click', '.mod', function(){
 	
-	"use strict";
+"use strict";
 	
-	firebase.auth().onAuthStateChanged(function (user) {
-
+firebase.auth().onAuthStateChanged(function (user) {
+	
 	var uid;
 
 	if (user) {
@@ -241,12 +242,11 @@ $(document).on('click', '.cancellaNodo', function(){
 			
 			if (uid === "gVNIcf2GI5PhnLSEElUdfhYb6jE3") {
 
-				$('.cancellaNodo').css({display: 'none'});
+					$('.cancellaNodo').hide();
 
 			}
 		});
 
 	}
 });
-	
-});
+	});

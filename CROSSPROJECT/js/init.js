@@ -1,7 +1,7 @@
+// inizializza l'effetto parallasse e l'interfaccia side-nav per i dispositivi mobile.
 (function($){
+	"use strict";
   $(function(){
-	  
-	  "use strict";
 
     $('.button-collapse').sideNav();
     $('.parallax').parallax();
@@ -9,8 +9,7 @@
   }); // end of document ready
 })(jQuery); // end of jQuery name space
 
-
-
+// inizializza gli elementi creati dinamicamente avente classe "collapsible".
 $(document).on('click', '.collapsible', function(){
 	
 	"use strict";
@@ -19,6 +18,7 @@ $(document).on('click', '.collapsible', function(){
 	
 });
 
+// inizializza gli elementi creati dinamicamente avente classe "modal".
 $(document).on('click', '.collapsible', function(){
 	
 	"use strict";
@@ -27,6 +27,7 @@ $(document).on('click', '.collapsible', function(){
 	
 });
 
+// inizializza l'elemento avente classe "modal" nella pagina "back-office.html".
   $(document).ready(function(){
 	  "use strict";
     // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered

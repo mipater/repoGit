@@ -1,5 +1,4 @@
-// JavaScript Document
-
+// gestise la visualizzazione di alcuni elementi delle pagine in base al fatto che l'utente sia autenticato o meno.
 firebase.auth().onAuthStateChanged(function(user) {
 	
 	"use strict";
@@ -23,10 +22,9 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 });
 
+//  listener che fa partire la procedura di autenticazione a firebase quando viene cliccato il button con id="signInBtn".
+$("#signInBtn").click(function() {
 
-$("#signInBtn").click(
-function() {
-	
 	"use strict";
 	
 	var email = $("#loginEmail").val();
@@ -50,24 +48,7 @@ function() {
 	
 });
 
-
-
-//function logout() {
-//	
-//	"use strict";
-//	
-//	firebase.auth().signOut().then(function () {
-//		// Sign-Out successful.
-//		window.location = 'index.html';
-//
-//	}, function (error) {
-//		// An error happened.
-//		alert(error.message);
-//		
-//	});
-//	
-//}
-
+// listener che rimanda l'utente alla pagina "index.html" quando si clicca o il pulsante di "logout".
 $("#indexLogout, #mobileLogout").click(function(){
 	
 	"use strict";
