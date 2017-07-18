@@ -1,22 +1,16 @@
 /* crea una variabile di tipo stringa che serve a creare i vari componenti(collapsible, modal, buttons, forms, textarea) in maniera dinamica, aggiungedoli ad uno specifico <div> con id=#prova nel <body> di back-office.html. */
 function addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descrizione){
-	
 	"use strict";
-	
 	var html = 
-'<div class="col s5 offset-s4"> <!-- INIZIO PRIMA COLONNA --> ' +
-    '<ul data-scic="'+rowCount+'" class="collapsible" data-collapsible="accordion"> <!-- INIZIO COLLAPSIBLE --> ' +
-     ' <li> ' +
+'<div class="col s5 offset-s4">'  +
+    '<ul data-scic="'+rowCount+'" class="collapsible" data-collapsible="accordion">  <li> ' +
        ' <div class="collapsible-header"><i class="material-icons">filter_drama</i>'+titolo+'</div>'+
       ' <div class="collapsible-body"> ' +
-        ' <!-- Modal Trigger --> ' +
 		'<div class="row">' +
-		' <img src="'+img+'" align="left" class="imgOp responsive-img">' +
-		'</div>' +
+		' <img src="'+img+'" align="left" class="imgOp responsive-img"></div>'+
 		' <p align="right">' +
         ' <a class="mod waves-effect waves-light btn btn-large" href="#modal'+rowCount+'"><i class="material-icons">mode_edit</i></a>'+ 
 		'<a id="'+opKey+'" data-cic="'+rowCount+'" class="qr waves-effect waves-light btn btn-large" href="#modal'+rowCount2+'"><i class="material-icons">view_module</i></a>' +
-         '<!-- Modal Structure -->' +
          '<div id="modal'+rowCount+'" class="modal modal-fixed-footer">'+
           ' <div class="modal-content">'+
             ' <h4>'+ titolo +'</h4>'+
@@ -24,8 +18,7 @@ function addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descr
 			'<div class="row"> ' +
 				'<div class="input-field col s12">' +
 				  '<textarea disabled value="" id="idOpera'+rowCount+'" class="materialize-textarea">' + opKey + '</textarea>'+
-				  '<label class="active" for="idOpera">ID</label>'+
-				'</div>' +
+				  '<label class="active" for="idOpera">ID</label></div>'+
 			  '</div>' +
 		     '</form>' + 
 			'<form class="col s12">'+
@@ -95,24 +88,14 @@ function addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descr
 	      '</div>'+
          '</div>'+
 		'</p>' +
-		 '<!-- Modal Trigger -->' +
-		 '<!-- Modal Structure -->' +
 		 '<div id="modal'+rowCount2+'" class="modal">' +
 		   '<div class="modal-content">' +
 			 '<h4>'+titolo+'</h4>' +
 		   '</div>' +
 		' <img id="qrcode'+rowCount+'" src=""/>' +
 		   '<div class="modal-footer">' +
-			'<a href="#!" data-trick="'+rowCount+'" class="print modal-action waves-effect waves-light btn btn-large"><i class="material-icons">print</i></a>' + 
-		   '</div>'+
-		  '</div>' +
-       '</div>'+
-     '</li>'+
-  ' </ul> <!-- FINE COLLAPSIBLE -->'+
-' </div> <!-- FINE PRIMA COLONNA -->';
-	
+			'<a href="#!" data-trick="'+rowCount+'" class="print modal-action waves-effect waves-light btn btn-large"><i class="material-icons">print</i></a> </div></div></div></li></ul></div>';
 	$("#prova").append(html);	
-
 }
 
 // listener che per ogni nodo aggiunto al database mi costruisce il codice html dinamicamente aggiungendo i valori del nodo prelevati dal database stesso.
