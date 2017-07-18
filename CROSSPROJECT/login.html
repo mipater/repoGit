@@ -1,22 +1,24 @@
 <!DOCTYPE html>
  <!--
       Author: CA2M
-      Version: 1.1
+      Version: 1.4
       Description: In questa pagina viene gestito il sistema di autenticazione a firebase. L'utente deve inserire le credenziali correttamente.
  -->
 <html lang="it">
  <!--questa pagina contiene la sezione di login per accedere all'area riservata al personale del museo -->
+<header>
 <head>
  <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
   <title>CA2M - Durrës Archaeological Museum</title>
-
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
+</header>
+<main>
 <body>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
@@ -26,7 +28,6 @@
         <li><a href="login.html">Login</a></li>
         <li><a id="indexLogout">Logout</a></li>
       </ul>
-
       <ul id="nav-mobile" class="side-nav">
         <li><a href="index.html">Vetrina</a></li>
         <li><a id="mobileLogin" href="login.html">Login</a></li> 
@@ -34,33 +35,25 @@
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
-
 <div id="index-banner" class="parallax-container">
     <div class="section no-pad-bot">
       <div class="container">
-        <br><br>
-        <h1 class="header center teal-text text-lighten-2">Durrës Archaeological Museum</h1>
+        <h1 class="header center teal-text text-lighten-2"><strong>Durrës Archaeological Museum</strong></h1>
         <div class="row center">
           <h5 class="header col s12 light"></h5>
         </div>
-        <br><br>
-
       </div>
     </div>
     <div class="parallax"><img src="background1.jpg" alt="Unsplashed background img 1"></div>
 </div>
-
-
   <div class="container">
     <div class="section">
-
-      <!--   login section  -->
+  <!--   login section  -->
   <div class="row">
         <div class="col s12">
           <div class="card white-grey darken-1">
            <div class="section"><h4 class="left-align">&nbsp; &nbsp; &nbsp;Login</h4></div>
             <div class="row">
-             
               <div class="input-field col s10 offset-s1">
                 <input id="loginEmail" type="email" class="validate">
                 <label for="login">Email</label>
@@ -73,28 +66,12 @@
               </div>
             </div>
            <div><h6 id="loginError" class="center"></h6></div> 
-
             <div class="card-action"> <a id="signInBtn" class="waves-effect waves-light btn">SIGN IN</a> </div>
           </div>
         </div>
       </div>
     </div>
  </div>
-
-
-
-  <!--  footer-->
-  <footer class="page-footer teal">
-    <div class="page-footer teal">
-      <div class="container">
-		  <a href="#" class="white-text">Made by</a> <a class="brown-text text-lighten-3">CA2M</a>
-      </div>
-    </div>
-  </footer>
-
-  
-
-
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script>
@@ -113,6 +90,13 @@
       firebase.initializeApp(config);
   </script> 
   <script src="js/login.js"></script>
-
   </body>
+  </main>
+  <footer class="page-footer teal">
+    <div class="page-footer teal">
+      <div class="container">
+		  <a href="#" class="white-text">Made by</a> <a class="brown-text text-lighten-3">CA2M</a>
+      </div>
+    </div>
+  </footer>
 </html>

@@ -6,18 +6,19 @@
  -->
 <html lang="it">
  <!--questa pagina consente al personale del museo di accedere a varie funzioni e operazioni che interagiscono con le opere d'arte -->
+ <header>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
 <title>CA2M - Durrës Archaeological Museum</title>
-
 <!-- CSS  -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
-
+</header>
+<main>
 <body>
 <nav class="white" role="navigation">
   <div class="nav-wrapper container"> <a id="logo-container" href="index.html" class="brand-logo">&nbsp;CA2M</a>
@@ -36,7 +37,7 @@
 <div id="index-banner" class="parallax-container">
   <div class="section no-pad-bot">
     <div class="container">
-      <h1 class="header center teal-text text-lighten-2">Durrës Archaeological Museum</h1>
+      <h1 class="header center teal-text text-lighten-2"><strong>Durrës Archaeological Museum</strong></h1>
       <div class="row center">
         <h5 class="header col s12 light"></h5>
       </div>
@@ -44,7 +45,6 @@
   </div>
   <div class="parallax"><img src="background1.jpg" alt="Unsplashed background img 1"></div>
 </div>
-
 <div class="container">
   <div class="section">
     <h4 class="center">BACK OFFICE SECTION</h4>
@@ -55,9 +55,10 @@
 <div id="prova" class="row"> 
 </div> <!-- END OF ROW -->
 
+</body>
+</main>
   <!-- Modal Trigger -->
-  <a class="waves-effect waves-light btn btn-floating btn-large waves-effect waves-light red" href="#modal500"><i class="material-icons">add</i></a>
-
+  <p class="addOperaBtn" align="right"><a class="waves-effect waves-light btn btn-floating btn-large waves-effect waves-light teal" href="#modal500"><i class="material-icons">add</i></a></p>
   <!-- Modal Structure -->
   <div id="modal500" class="modal modal-fixed-footer">
     <div class="modal-content">
@@ -121,12 +122,11 @@
       <a href="#!" id="addBtn" class="modal-action modal-close waves-effect waves-green btn-flat ">Invia</a>
     </div>
   </div> 
-  
-  
-	
 <footer class="page-footer teal">
-  <div class="page-footer teal">
-    <div class="container"> <a href="#" class="white-text">Made by</a> <a class="brown-text text-lighten-3">CA2M</a></div>
+  <div class="container">
+	<div class="container brown-text text-lighten-3">
+	© 2017 CA2M
+	</div>
   </div>
 </footer>
 
@@ -150,5 +150,4 @@
 <script src="js/backoffice.js"></script> 
 <script src="js/init.js"></script> 
 <script src="js/login.js"></script>
-</body>
 </html>

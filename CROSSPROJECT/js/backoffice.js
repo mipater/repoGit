@@ -3,14 +3,14 @@ function addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descr
 	"use strict";
 	var html = 
 '<div class="col s5 offset-s4">'  +
-    '<ul data-scic="'+rowCount+'" class="collapsible" data-collapsible="accordion">  <li> ' +
+    '<ul data-scic="'+rowCount+'" class="collapsible teal grey lighten-5" data-collapsible="accordion">  <li> ' +
        ' <div class="collapsible-header"><i class="material-icons">filter_drama</i>'+titolo+'</div>'+
       ' <div class="collapsible-body"> ' +
 		'<div class="row">' +
 		' <img src="'+img+'" align="left" class="imgOp responsive-img"></div>'+
 		' <p align="right">' +
         ' <a class="mod waves-effect waves-light btn btn-large" href="#modal'+rowCount+'"><i class="material-icons">mode_edit</i></a>'+ 
-		'<a id="'+opKey+'" data-cic="'+rowCount+'" class="qr waves-effect waves-light btn btn-large" href="#modal'+rowCount2+'"><i class="material-icons">view_module</i></a>' +
+	'<a id="'+opKey+'" data-cic="'+rowCount+'" class="qr waves-effect waves-light btn btn-large" href="#modal'+rowCount2+'"><i class="material-icons">dashboard</i></a>' +
          '<div id="modal'+rowCount+'" class="modal modal-fixed-footer">'+
           ' <div class="modal-content">'+
             ' <h4>'+ titolo +'</h4>'+
@@ -130,6 +130,56 @@ $("#addBtn").click(function(){
 	
 	"use strict";
 	
+	var rootRef = firebase.database().ref();
+    rootRef.once('value', function (snapshot) {
+    if (!snapshot.hasChild("opere")) {
+		
+		var k = rootRef.push().key;
+		rootRef.child("opere").child(k).set({
+			
+			autore: $("#autoreOpera").val(),
+	        titolo: $("#titoloOpera").val(),
+     	    periodo: $("#periodoOpera").val(),
+            descrizione: $("#descrizioneOpera").val(),
+     	    url: "empty"
+		
+		});
+		var storageRef2 = firebase.storage().ref(k+'.mp4'); 
+	    var file2 = document.getElementById('targetFiles2').files[0];
+	    storageRef2.put(file2);
+		
+		var storageRef = firebase.storage().ref(k+'.jpg');
+	    var file = document.getElementById('targetFiles').files[0];
+	    var uploadTask = storageRef.put(file);
+		
+		uploadTask.on('state_changed', function(snapshot){
+	  // Observe state change events such as progress, pause, and resume
+	  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+	  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+	  console.log('Upload is ' + progress + '% done');
+	  switch (snapshot.state) {
+		case firebase.storage.TaskState.PAUSED: // or 'paused'
+		  console.log('Upload is paused');
+		  break;
+		case firebase.storage.TaskState.RUNNING: // or 'running'
+		  console.log('Upload is running');
+		  break;
+	  }
+	}, function(error) {
+	  // Handle unsuccessful uploads
+		alert(error.message);
+	}, function() {
+	  // Handle successful uploads on complete
+	  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+	  var downloadURL = uploadTask.snapshot.downloadURL;
+			firebase.database().ref('opere/'+k).update({
+			"url": downloadURL
+		});
+		location.reload();
+});	
+    }
+});
+	
 	var newPostKey = firebase.database().ref().child('opere').push().key;
 	
 	var storageRef2 = firebase.storage().ref(newPostKey+'.mp4'); 
@@ -187,18 +237,23 @@ $(document).on('click', '.modificaNodo', function(){
 	
     var imgStorage = firebase.storage().ref(keyOpera+'.jpg');		   
     var file = document.getElementById('targetImg'+count).files[0];
-	imgStorage.put(file);
+	if (typeof file !== "undefined"){
+		imgStorage.put(file);
+	}
 	
 	var videoStorage = firebase.storage().ref(keyOpera+'.mp4');
     var file2 = document.getElementById('targetVideo'+count).files[0];
-	videoStorage.put(file2);
-						  
-	var descrizioneOperas = $("#descrizioneOpera"+count).val();
-	
+	if (typeof file2 !== "undefined"){
+		videoStorage.put(file2);
+	}
+						 
 	var updateRef = firebase.database().ref("opere/"+keyOpera);
 	updateRef.update({
 
-		 "descrizione": descrizioneOperas
+		 "descrizione": $("#descrizioneOpera"+count).val(),
+		 "titolo":  $("#titoloOpera"+count).val(),
+		 "autore": $("#autoreOpera"+count).val(),
+		 "periodo": $("#periodoOpera"+count).val()
 
 	});
 	
@@ -267,19 +322,18 @@ $(document).on('click', '.qr', function(){
 	
 	var id = this.id; // opKey 
 	var count = $(this).data('cic');	//contatore
-	var imgURL = 'https://chart.googleapis.com/chart?chs=275x275&cht=qr&chl='+id+'"';
+	var imgURL = 'https://chart.googleapis.com/chart?chs=275x275&cht=qr&chl='+id;
 	$("#qrcode"+count).attr('src', imgURL);
 	
 	
 });
 
-//  listener che consente la stampa del qr code.
+// listener che consente la stampa del qr code.
 $(document).on('click', '.print', function(){
 	
 	"use strict";
 	
 	var count = $(this).data('trick');
-	var imgURL = $("#qrcode"+count).attr('src');
 	
 	$("#qrcode"+count).print();
 	
