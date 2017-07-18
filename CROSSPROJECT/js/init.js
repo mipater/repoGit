@@ -22,8 +22,14 @@ $(document).on('click', '.collapsible', function(){
 $(document).on('click', '.collapsible', function(){
 	
 	"use strict";
+	var count = $(this).data('scic');
 	
-	$('.modal').modal();
+  $('.modal').modal({
+      dismissible: true, // Modal can be dismissed by clicking outside of the modal
+      complete: function() { $("#qrcode"+count).empty(); } // Callback for Modal close
+    }
+  );
+     
 	
 });
 

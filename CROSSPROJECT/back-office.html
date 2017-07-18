@@ -5,7 +5,7 @@
       Description: This is the back-office page
  -->
 <html lang="it">
- <!--questa pagina consente al personale del museo di accedere a varie funzioni e operazionii che interagiscono con le opere d'arte -->
+ <!--questa pagina consente al personale del museo di accedere a varie funzioni e operazioni che interagiscono con le opere d'arte -->
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -101,7 +101,7 @@
         <input id="targetFiles" type="file">
       </div>
       <div class="file-path-wrapper">
-        <input class="file-path validate" type="text">
+        <input placeholder="Nessun immagine selezionata" class="file-path validate" type="text">
       </div>
     </div>
   </form>
@@ -112,7 +112,7 @@
         <input id="targetFiles2" type="file">
       </div>
       <div class="file-path-wrapper">
-        <input class="file-path validate" type="text">
+        <input placeholder="Nessun video selezionato" class="file-path validate" type="text">
       </div>
     </div>
   </form>
@@ -122,17 +122,15 @@
     </div>
   </div> 
   
+  
 	
 <footer class="page-footer teal">
   <div class="page-footer teal">
     <div class="container"> <a href="#" class="white-text">Made by</a> <a class="brown-text text-lighten-3">CA2M</a></div>
   </div>
 </footer>
- 
 
-<!--  Scripts--> 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script> 
+ <!--  Scripts--> 
 <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script> 
 <script>
 	  // Initialize Firebase
@@ -146,6 +144,10 @@
 	  };
       firebase.initializeApp(config);
 </script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lrsjng.jquery-qrcode/0.14.0/jquery-qrcode.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.5.1/jQuery.print.js"></script>
 <script src="js/backoffice.js"></script> 
 <script src="js/init.js"></script> 
 <script src="js/login.js"></script>

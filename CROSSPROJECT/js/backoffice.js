@@ -1,11 +1,11 @@
 /* crea una variabile di tipo stringa che serve a creare i vari componenti(collapsible, modal, buttons, forms, textarea) in maniera dinamica, aggiungedoli ad uno specifico <div> con id=#prova nel <body> di back-office.html. */
-function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
+function addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descrizione){
 	
 	"use strict";
 	
 	var html = 
 '<div class="col s5 offset-s4"> <!-- INIZIO PRIMA COLONNA --> ' +
-    '<ul class="collapsible" data-collapsible="accordion"> <!-- INIZIO COLLAPSIBLE --> ' +
+    '<ul data-scic="'+rowCount+'" class="collapsible" data-collapsible="accordion"> <!-- INIZIO COLLAPSIBLE --> ' +
      ' <li> ' +
        ' <div class="collapsible-header"><i class="material-icons">filter_drama</i>'+titolo+'</div>'+
       ' <div class="collapsible-body"> ' +
@@ -15,6 +15,7 @@ function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
 		'</div>' +
 		' <p align="right">' +
         ' <a class="mod waves-effect waves-light btn btn-large" href="#modal'+rowCount+'"><i class="material-icons">mode_edit</i></a>'+ 
+		'<a id="'+opKey+'" data-cic="'+rowCount+'" class="qr waves-effect waves-light btn btn-large" href="#modal'+rowCount2+'"><i class="material-icons">view_module</i></a>' +
          '<!-- Modal Structure -->' +
          '<div id="modal'+rowCount+'" class="modal modal-fixed-footer">'+
           ' <div class="modal-content">'+
@@ -72,7 +73,7 @@ function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
 				'<input id="targetImg'+rowCount+'" type="file">'+
 			 '</div>'+
 			 '<div class="file-path-wrapper">'+
-			  '<input class="file-path validate" type="text">'+
+			  '<input placeholder="Nessun immagine selezionata" class="file-path validate" type="text">'+
 			 '</div>'+
 		    '</div>'+
 		  '</form>'+
@@ -83,7 +84,7 @@ function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
 				'<input id="targetVideo'+rowCount+'" type="file">'+
 			 '</div>'+
 			 '<div class="file-path-wrapper">'+
-			  '<input class="file-path validate" type="text">'+
+			  '<input placeholder="Nessun video selezionato" class="file-path validate" type="text">'+
 			 '</div>'+
 		    '</div>'+
 		  '</form>'+
@@ -94,12 +95,24 @@ function addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione){
 	      '</div>'+
          '</div>'+
 		'</p>' +
+		 '<!-- Modal Trigger -->' +
+		 '<!-- Modal Structure -->' +
+		 '<div id="modal'+rowCount2+'" class="modal">' +
+		   '<div class="modal-content">' +
+			 '<h4>'+titolo+'</h4>' +
+		   '</div>' +
+		' <img id="qrcode'+rowCount+'" src=""/>' +
+		   '<div class="modal-footer">' +
+			'<a href="#!" data-trick="'+rowCount+'" class="print modal-action waves-effect waves-light btn btn-large"><i class="material-icons">print</i></a>' + 
+		   '</div>'+
+		  '</div>' +
        '</div>'+
      '</li>'+
   ' </ul> <!-- FINE COLLAPSIBLE -->'+
 ' </div> <!-- FINE PRIMA COLONNA -->';
 	
 	$("#prova").append(html);	
+
 }
 
 // listener che per ogni nodo aggiunto al database mi costruisce il codice html dinamicamente aggiungendo i valori del nodo prelevati dal database stesso.
@@ -108,12 +121,14 @@ $(document).ready(function(){
 "use strict";
 
 var rowCount = 0;
+var rowCount2 = 100;
 
 var ref = firebase.database().ref("opere");
 
 ref.on("child_added", function(snap) {
 	
 	rowCount++;
+	rowCount2++;
 
 	var opKey = snap.getKey();
 	var autore = snap.child("autore").val();
@@ -122,7 +137,7 @@ ref.on("child_added", function(snap) {
 	var titolo = snap.child("titolo").val();
 	var img = snap.child("url").val();
 	
-	addHtml(img, titolo, rowCount, opKey, autore, periodo, descrizione);
+	addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descrizione);
 		
 });
 });
@@ -131,11 +146,12 @@ ref.on("child_added", function(snap) {
 $("#addBtn").click(function(){
 	
 	"use strict";
-
+	
 	var newPostKey = firebase.database().ref().child('opere').push().key;
-	var storageRef = firebase.storage().ref(newPostKey+'.jpg');
-	var file = document.getElementById('targetFiles').files[0];
-	var uploadTask = storageRef.put(file);
+	
+	var storageRef2 = firebase.storage().ref(newPostKey+'.mp4'); 
+	var file2 = document.getElementById('targetFiles2').files[0];
+	storageRef2.put(file2);
 	
 	firebase.database().ref('opere/'+newPostKey).set({
 
@@ -144,25 +160,37 @@ $("#addBtn").click(function(){
 	periodo: $("#periodoOpera").val(),
     descrizione: $("#descrizioneOpera").val(),
 	url: "empty"
-
+		
     });
-	var storageRef2 = firebase.storage().ref(newPostKey+'.mp4'); 
-	var file2 = document.getElementById('targetFiles2').files[0];
-	storageRef2.put(file2);
 	
-
-uploadTask.on('state_changed',
- function() {
+	var storageRef = firebase.storage().ref(newPostKey+'.jpg');
+	var file = document.getElementById('targetFiles').files[0];
+	var uploadTask = storageRef.put(file);
+	
+uploadTask.on('state_changed', function(snapshot){
+  // Observe state change events such as progress, pause, and resume
+  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  console.log('Upload is ' + progress + '% done');
+  switch (snapshot.state) {
+    case firebase.storage.TaskState.PAUSED: // or 'paused'
+      console.log('Upload is paused');
+      break;
+    case firebase.storage.TaskState.RUNNING: // or 'running'
+      console.log('Upload is running');
+      break;
+  }
+}, function(error) {
   // Handle unsuccessful uploads
-	var e = "Error uploading file!";
-	alert(e);
-}, function(newPostKey) {
+	alert(error.message);
+}, function() {
   // Handle successful uploads on complete
   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
   var downloadURL = uploadTask.snapshot.downloadURL;
-	firebase.database().ref('opere/'+ newPostKey).update({
+		firebase.database().ref('opere/'+newPostKey).update({
 		"url": downloadURL
 	});
+	location.reload();
 });	
 }); 
 
@@ -208,15 +236,13 @@ $(document).on('click', '.cancellaNodo', function(){
 	
 	  // Delete the file
 	storageRef.delete().then(function() {
-	}).catch(function() {
-		var e1 = "Error removing file!";
-		alert(e1);
+	}).catch(function(error) {
+		alert(error.message);
 	});
 	
 	storageRef2.delete().then(function() {
-	}).catch(function() {
-		var e2 = "Error removing file!";
-		alert(e2);
+	}).catch(function(error) {
+		alert(error.message);
 	});
 	
 	firebase.database().ref("opere/"+keyOpera).remove();
@@ -250,3 +276,28 @@ firebase.auth().onAuthStateChanged(function (user) {
 	}
 });
 	});
+
+// listener che genera il qr code per ogni opera.
+$(document).on('click', '.qr', function(){
+	
+	"use strict";
+	
+	var id = this.id; // opKey 
+	var count = $(this).data('cic');	//contatore
+	var imgURL = 'https://chart.googleapis.com/chart?chs=275x275&cht=qr&chl='+id+'"';
+	$("#qrcode"+count).attr('src', imgURL);
+	
+	
+});
+
+//  listener che consente la stampa del qr code.
+$(document).on('click', '.print', function(){
+	
+	"use strict";
+	
+	var count = $(this).data('trick');
+	var imgURL = $("#qrcode"+count).attr('src');
+	
+	$("#qrcode"+count).print();
+	
+});
