@@ -2,7 +2,7 @@
 function addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descrizione){
 	"use strict";
 	var html = 
-'<div class="col s5 offset-s4">'  +
+'<div class="col s6 offset-s3">'  +
     '<ul data-scic="'+rowCount+'" class="collapsible teal grey lighten-5" data-collapsible="accordion">  <li> ' +
        ' <div class="collapsible-header"><i class="material-icons">filter_drama</i>'+titolo+'</div>'+
       ' <div class="collapsible-body"> ' +
@@ -98,6 +98,91 @@ function addHtml(img, titolo, rowCount, rowCount2, opKey, autore, periodo, descr
 	$("#prova").append(html);	
 }
 
+// funzione che gestisce l'upload dell'immagine.
+function imgUploadHandler(uploadTask, key){
+	"use strict";
+	
+	uploadTask.on('state_changed', function(snapshot){
+    // Observe state change events such as progress, pause, and resume
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+	  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+	  console.log('Upload is ' + progress + '% done');
+	  switch (snapshot.state) {
+		case firebase.storage.TaskState.PAUSED: // or 'paused'
+		  console.log('Upload is paused');
+		  break;
+		case firebase.storage.TaskState.RUNNING: // or 'running'
+		  console.log('Upload is running');
+		  break;
+	  }
+	}, function(error) {
+	  // Handle unsuccessful uploads
+		alert(error.message);
+	}, function() {
+	  // Handle successful uploads on complete
+	  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+	  var downloadURL = uploadTask.snapshot.downloadURL;
+			firebase.database().ref('opere/'+key).update({
+			"url": downloadURL
+		});
+		});	
+}
+
+// funzione che gestisce l'upload del video.
+function videoUploadHandler(uploadTask){
+	"use strict";
+	
+	uploadTask.on('state_changed', function(snapshot){
+    // Observe state change events such as progress, pause, and resume
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+	  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+	  console.log('Upload is ' + progress + '% done');
+	  switch (snapshot.state) {
+		case firebase.storage.TaskState.PAUSED: // or 'paused'
+		  console.log('Upload is paused');
+		  break;
+		case firebase.storage.TaskState.RUNNING: // or 'running'
+		  console.log('Upload is running');
+		  break;
+	  }
+	}, function(error) {
+	  // Handle unsuccessful uploads
+		alert(error.message);
+	}, function() {
+	  // Handle successful uploads on complete
+	  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+		alert("Video caricato con successo!");
+		location.reload();
+		});	
+}
+
+/* funzione che gestisce il caricamento di una nuova opera nel database (quando è stato già creato il nodo "opere") prelevando le informazioni dagli appositi form compilati dall'utente.*/
+function addNewChild(){
+	
+	"use strict";
+	
+	var newPostKey = firebase.database().ref().child('opere').push().key;
+	
+	var storageRef2 = firebase.storage().ref(newPostKey+'.mp4'); 
+	var file2 = document.getElementById('targetFiles2').files[0];
+	var videoTask = storageRef2.put(file2);
+	var storageRef = firebase.storage().ref(newPostKey+'.jpg');
+	var file = document.getElementById('targetFiles').files[0];
+	var uploadTask = storageRef.put(file);
+	
+	firebase.database().ref('opere/'+newPostKey).set({
+
+	autore: $("#autoreOpera").val(),
+	titolo: $("#titoloOpera").val(),
+	periodo: $("#periodoOpera").val(),
+    descrizione: $("#descrizioneOpera").val(),
+	url: "empty"
+		
+    });
+	imgUploadHandler(uploadTask, newPostKey);
+	videoUploadHandler(videoTask);	
+}
+
 // listener che per ogni nodo aggiunto al database mi costruisce il codice html dinamicamente aggiungendo i valori del nodo prelevati dal database stesso.
 $(document).ready(function(){
 	
@@ -125,106 +210,31 @@ ref.on("child_added", function(snap) {
 });
 });
 
-/* listener che si attiva quando viene cliccato il pulsante con id=#addBtn situato nella pagina back-office.html. Aggiunge un nuovo nodo (opera) nel database, prelevando le informazioni da appositi form compilati dall'utente.*/
+/* listener che si attiva quando viene cliccato il pulsante con id=#addBtn situato nella pagina back-office.html. verifica se esiste il nodo "opera" nel database. Se esiste allora chiama la funzione "addNewChild()" altimenti crea il nodo "opere" e un altro come suo child, rappresentante la nuova opera, prelevando le informazioni dagli appositi form compilati dall'utente.*/
 $("#addBtn").click(function(){
-	
 	"use strict";
-	
 	var rootRef = firebase.database().ref();
     rootRef.once('value', function (snapshot) {
-    if (!snapshot.hasChild("opere")) {
-		
+    if (!snapshot.hasChild("opere")) {		
 		var k = rootRef.push().key;
 		rootRef.child("opere").child(k).set({
-			
 			autore: $("#autoreOpera").val(),
 	        titolo: $("#titoloOpera").val(),
      	    periodo: $("#periodoOpera").val(),
             descrizione: $("#descrizioneOpera").val(),
      	    url: "empty"
-		
 		});
 		var storageRef2 = firebase.storage().ref(k+'.mp4'); 
 	    var file2 = document.getElementById('targetFiles2').files[0];
-	    storageRef2.put(file2);
-		
+	    var videoTask = storageRef2.put(file2);
 		var storageRef = firebase.storage().ref(k+'.jpg');
 	    var file = document.getElementById('targetFiles').files[0];
 	    var uploadTask = storageRef.put(file);
-		
-		uploadTask.on('state_changed', function(snapshot){
-	  // Observe state change events such as progress, pause, and resume
-	  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-	  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-	  console.log('Upload is ' + progress + '% done');
-	  switch (snapshot.state) {
-		case firebase.storage.TaskState.PAUSED: // or 'paused'
-		  console.log('Upload is paused');
-		  break;
-		case firebase.storage.TaskState.RUNNING: // or 'running'
-		  console.log('Upload is running');
-		  break;
-	  }
-	}, function(error) {
-	  // Handle unsuccessful uploads
-		alert(error.message);
-	}, function() {
-	  // Handle successful uploads on complete
-	  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-	  var downloadURL = uploadTask.snapshot.downloadURL;
-			firebase.database().ref('opere/'+k).update({
-			"url": downloadURL
-		});
-		location.reload();
-});	
+		imgUploadHandler(uploadTask, k);
+		videoUploadHandler(videoTask);
     }
+		else {addNewChild();}
 });
-	
-	var newPostKey = firebase.database().ref().child('opere').push().key;
-	
-	var storageRef2 = firebase.storage().ref(newPostKey+'.mp4'); 
-	var file2 = document.getElementById('targetFiles2').files[0];
-	storageRef2.put(file2);
-	
-	firebase.database().ref('opere/'+newPostKey).set({
-
-	autore: $("#autoreOpera").val(),
-	titolo: $("#titoloOpera").val(),
-	periodo: $("#periodoOpera").val(),
-    descrizione: $("#descrizioneOpera").val(),
-	url: "empty"
-		
-    });
-	
-	var storageRef = firebase.storage().ref(newPostKey+'.jpg');
-	var file = document.getElementById('targetFiles').files[0];
-	var uploadTask = storageRef.put(file);
-	
-uploadTask.on('state_changed', function(snapshot){
-  // Observe state change events such as progress, pause, and resume
-  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-  var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  console.log('Upload is ' + progress + '% done');
-  switch (snapshot.state) {
-    case firebase.storage.TaskState.PAUSED: // or 'paused'
-      console.log('Upload is paused');
-      break;
-    case firebase.storage.TaskState.RUNNING: // or 'running'
-      console.log('Upload is running');
-      break;
-  }
-}, function(error) {
-  // Handle unsuccessful uploads
-	alert(error.message);
-}, function() {
-  // Handle successful uploads on complete
-  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-  var downloadURL = uploadTask.snapshot.downloadURL;
-		firebase.database().ref('opere/'+newPostKey).update({
-		"url": downloadURL
-	});
-	location.reload();
-});	
 }); 
 
 /* listener che, in seguito al click del pulsante "conferma" creato dinamicamente, salva le modifiche effettuate dall'utente, il quale modifica i campi desiderati relativi all'opera, e le apporta al database al relativo nodo.*/
@@ -235,16 +245,20 @@ $(document).on('click', '.modificaNodo', function(){
 	var count = this.id;
 	var keyOpera = $("#idOpera"+count).val();
 	
-    var imgStorage = firebase.storage().ref(keyOpera+'.jpg');		   
-    var file = document.getElementById('targetImg'+count).files[0];
-	if (typeof file !== "undefined"){
-		imgStorage.put(file);
-	}
-	
 	var videoStorage = firebase.storage().ref(keyOpera+'.mp4');
     var file2 = document.getElementById('targetVideo'+count).files[0];
 	if (typeof file2 !== "undefined"){
-		videoStorage.put(file2);
+		var videoTask = videoStorage.put(file2);
+		videoUploadHandler(videoTask);
+	}
+	
+    var imgStorage = firebase.storage().ref(keyOpera+'.jpg');		   
+    var file = document.getElementById('targetImg'+count).files[0];
+	if (typeof file !== "undefined"){
+	    var imgTask = imgStorage.put(file);
+		imgUploadHandler(imgTask, keyOpera);
+		setTimeout(function(){if(typeof file2 === "undefined"){location.reload();}}, 1000);
+		
 	}
 						 
 	var updateRef = firebase.database().ref("opere/"+keyOpera);
@@ -254,7 +268,6 @@ $(document).on('click', '.modificaNodo', function(){
 		 "titolo":  $("#titoloOpera"+count).val(),
 		 "autore": $("#autoreOpera"+count).val(),
 		 "periodo": $("#periodoOpera"+count).val()
-
 	});
 	
 });
@@ -279,6 +292,7 @@ $(document).on('click', '.cancellaNodo', function(){
 	});
 	
 	storageRef2.delete().then(function() {
+		location.reload();
 	}).catch(function(error) {
 		alert(error.message);
 	});
